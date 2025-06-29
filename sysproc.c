@@ -9,6 +9,7 @@
 #include "pinfo.h"
 #include "spinlock.h"
 
+// defining it as an extern struct since it is already defined in proc.c
 extern struct
 {
   struct spinlock lock;
@@ -94,14 +95,24 @@ int sys_uptime(void)
 
 int sys_getproclist(void)
 {
+  // Initializing a list of type struct pinfo & integer to retrieve from the user.
   struct pinfo *list;
   int max;
+
+  // Fetching argument 0 (pointer) from the user and returning -1 if failed.
   if (argptr(0, (void *)&list, sizeof(*list)) < 0)
     return -1;
+  // Fetching argument 1 (integer) from the user and returning -2 if failed.
   if (argint(1, &max) < 0)
     return -2;
+
+  // counter for number of processes running in any state.
   int counter = 0;
+
+  // Acquiring the lock on the process table to avoid race condition or wrong results.
   acquire(&ptable.lock);
+
+  // Iterating over active (not UNUSED) processes.
   for (struct proc *p = ptable.proc; p < &ptable.proc[NPROC] && counter < max; p++)
   {
     if (p->state != UNUSED)
@@ -112,6 +123,8 @@ int sys_getproclist(void)
       process.state = p->state;
       process.sz = p->sz;
       safestrcpy(process.name, p->name, sizeof(p->name));
+
+      // Copying from kernel space to user space and returning -3 if failed.
       if (copyout(myproc()->pgdir, (uint)((void *)list + counter * sizeof(struct pinfo)), (char *)&process, sizeof(process)) < 0)
       {
         release(&ptable.lock);
