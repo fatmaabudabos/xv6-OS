@@ -109,6 +109,8 @@ extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_getsyscallcount(void);
 extern int sys_getproclist(void);
+extern int sys_getppid(void);
+
 
 
 static int (*syscalls[])(void) = {
@@ -135,6 +137,8 @@ static int (*syscalls[])(void) = {
 [SYS_close]   sys_close,
 [SYS_getsyscallcount]   sys_getsyscallcount,
 [SYS_getproclist] sys_getproclist,
+[SYS_getppid] sys_getppid,
+
 };
 
 void

@@ -22,3 +22,5 @@
 #define SYS_close  21
 #define SYS_getsyscallcount 22
 #define SYS_getproclist 23
+#define SYS_getppid 24
+

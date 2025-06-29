@@ -29,5 +29,10 @@ SYSCALL(getpid)
 SYSCALL(sbrk)
 SYSCALL(sleep)
 SYSCALL(uptime)
+<<<<<<< Updated upstream
 SYSCALL(getsyscallcount)
 SYSCALL(getproclist)
+=======
+SYSCALL(getproclist)
+SYSCALL(getppid)
+>>>>>>> Stashed changes
