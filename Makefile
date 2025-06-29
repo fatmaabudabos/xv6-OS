@@ -28,6 +28,8 @@ OBJS = \
 	vectors.o\
 	vm.o\
 
+
+
 # Cross-compiling (e.g., on Mac OS X)
 # TOOLPREFIX = i386-jos-elf
 
@@ -182,7 +184,12 @@ UPROGS=\
 	_wc\
 	_zombie\
 	_ps\
+<<<<<<< Updated upstream
     _sccount\
+=======
+	_getppid\
+
+>>>>>>> Stashed changes
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)

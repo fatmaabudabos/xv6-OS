@@ -135,6 +135,7 @@ int sys_getproclist(void)
   }
   release(&ptable.lock);
   return counter;
+<<<<<<< Updated upstream
 
 }
 
@@ -147,4 +148,13 @@ int sys_getsyscallcount(void)
   if (argint(0, &num) < 0 || num < 0 || num >= NSYSCALLS)
     return -1;
   return syscall_counts[num];
+=======
+}
+
+int sys_getppid(void) {   ///// for getting the parents proccess of a certain process 
+  struct proc *p = myproc();
+  if (p->parent)
+    return p->parent->pid;
+  return -1;  // No parent (shouldn't happen)
+>>>>>>> Stashed changes
 }

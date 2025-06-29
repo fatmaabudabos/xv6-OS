@@ -26,6 +26,8 @@ int sleep(int);
 int uptime(void);
 int getsyscallcount(int);
 int getproclist(struct pinfo *list, int max);
+int getppid(void);
+
 
 // ulib.c
 int stat(const char*, struct stat*);
