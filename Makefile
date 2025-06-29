@@ -184,12 +184,9 @@ UPROGS=\
 	_wc\
 	_zombie\
 	_ps\
-<<<<<<< Updated upstream
     _sccount\
-=======
 	_getppid\
 
->>>>>>> Stashed changes
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)

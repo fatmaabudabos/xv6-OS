@@ -9,6 +9,9 @@
 #include "pinfo.h"
 #include "spinlock.h"
 
+#define NSYSCALLS 23
+extern int syscall_counts[]; // declared in syscall.c
+
 // defining it as an extern struct since it is already defined in proc.c
 extern struct
 {
@@ -135,12 +138,9 @@ int sys_getproclist(void)
   }
   release(&ptable.lock);
   return counter;
-<<<<<<< Updated upstream
-
 }
 
-#define NSYSCALLS 23  
-extern int syscall_counts[];  // declared in syscall.c
+
 
 int sys_getsyscallcount(void)
 {
@@ -148,13 +148,12 @@ int sys_getsyscallcount(void)
   if (argint(0, &num) < 0 || num < 0 || num >= NSYSCALLS)
     return -1;
   return syscall_counts[num];
-=======
 }
 
-int sys_getppid(void) {   ///// for getting the parents proccess of a certain process 
+int sys_getppid(void)
+{ ///// for getting the parents proccess of a certain process
   struct proc *p = myproc();
   if (p->parent)
     return p->parent->pid;
-  return -1;  // No parent (shouldn't happen)
->>>>>>> Stashed changes
+  return -1; // No parent (shouldn't happen)
 }
