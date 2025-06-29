@@ -135,4 +135,16 @@ int sys_getproclist(void)
   }
   release(&ptable.lock);
   return counter;
+
+}
+
+#define NSYSCALLS 23  
+extern int syscall_counts[];  // declared in syscall.c
+
+int sys_getsyscallcount(void)
+{
+  int num;
+  if (argint(0, &num) < 0 || num < 0 || num >= NSYSCALLS)
+    return -1;
+  return syscall_counts[num];
 }
