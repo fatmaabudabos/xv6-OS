@@ -186,6 +186,7 @@ UPROGS=\
 	_ps\
     _sccount\
 	_getppid\
+	_touch\
 	_head\
 
 fs.img: mkfs README $(UPROGS)
