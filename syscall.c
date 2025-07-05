@@ -113,6 +113,7 @@ extern int sys_getppid(void);
 
 
 
+
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
 [SYS_exit]    sys_exit,
@@ -138,6 +139,7 @@ static int (*syscalls[])(void) = {
 [SYS_getsyscallcount]   sys_getsyscallcount,
 [SYS_getproclist] sys_getproclist,
 [SYS_getppid] sys_getppid,
+
 
 };
 

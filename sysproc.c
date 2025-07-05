@@ -8,7 +8,6 @@
 #include "proc.h"
 #include "pinfo.h"
 #include "spinlock.h"
-
 #define NSYSCALLS 23
 extern int syscall_counts[]; // declared in syscall.c
 
@@ -157,3 +156,6 @@ int sys_getppid(void)
     return p->parent->pid;
   return -1; // No parent (shouldn't happen)
 }
+
+
+
