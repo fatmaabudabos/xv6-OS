@@ -186,8 +186,7 @@ UPROGS=\
 	_ps\
     _sccount\
 	_getppid\
-	_getcwd_test\
-
+	
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)

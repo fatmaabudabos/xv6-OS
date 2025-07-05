@@ -6,7 +6,6 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
-#include "fs.h"
 #include "pinfo.h"
 #include "spinlock.h"
 #define NSYSCALLS 23
@@ -158,33 +157,5 @@ int sys_getppid(void)
   return -1; // No parent (shouldn't happen)
 }
 
-// Forward declare struct inode here so compiler knows it's a struct
-struct inode;
 
 
-// New syscall to get current working directory inode number as string
-int sys_getcwd(void) {
-    char *buf;
-    int size;
-    struct proc *p = myproc();
-    char temp[32];
-    int len;
-
-    if (argint(1, &size) < 0)
-        return -1;
-    if (argptr(0, &buf, size) < 0)
-        return -1;
-
-    if (!p->cwd)
-        return -1;
-
-    len = snprintf(temp, sizeof(temp), "/inodeptr%p", p->cwd);
-
-    if (len >= size)
-        return -1;
-
-    if (copyout(p->pgdir, (uint)buf, temp, len + 1) < 0)
-        return -1;
-
-    return 0;
-}
