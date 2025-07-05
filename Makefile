@@ -189,6 +189,7 @@ UPROGS=\
 	_touch\
 	_head\
 	_find\
+	_cp\
 
 
 fs.img: mkfs README $(UPROGS)
