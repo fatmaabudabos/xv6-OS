@@ -188,6 +188,8 @@ UPROGS=\
 	_getppid\
 	_touch\
 	_head\
+	_find\
+
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
