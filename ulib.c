@@ -107,6 +107,7 @@ memmove(void *vdst, const void *vsrc, int n)
   return vdst;
 }
 
+// kthread functions 
 int kthread_create(void (*fnc)(void *), void *arg)
 {
 	char *stack = sbrk(STACK_SIZE);
@@ -120,4 +121,17 @@ int kthread_join(int tid)
 
 void kthread_exit(void) {
   exit();
+}
+
+// Spinlock functions for user space
+void spinlock_init(spinlock_t *lk) {
+  lk->locked = 0;
+}
+
+void spinlock_acquire(spinlock_t *lk) {
+  while(xchg(&lk->locked, 1) != 0);
+}
+
+void spinlock_release(spinlock_t *lk) {
+  xchg(&lk->locked, 0);
 }
