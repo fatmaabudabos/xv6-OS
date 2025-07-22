@@ -532,3 +532,98 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+int clone(void (*fcn)(void*), void* arg, void *stack) {
+  int i, pid;
+  struct proc *thread;
+  struct proc *main_thread = myproc();
+
+  // Ensure thread stack is valid & there is a space for it.
+  if(((uint) stack % PGSIZE) != 0 || (main_thread->sz - (uint)stack) < PGSIZE)
+    return -1;
+  
+  // Allocate a new process (thread).
+  if((thread = allocproc()) == 0)
+    return -2;
+
+  pid = thread->pid;
+
+  // Share address space & properties with parent.
+  thread->parent = main_thread;
+  thread->pgdir = main_thread->pgdir;
+  thread->sz = main_thread->sz;
+  *thread->tf = *main_thread->tf;
+  for (i = 0; i < NOFILE; i++)
+    if (main_thread->ofile[i])
+      thread->ofile[i] = filedup(main_thread->ofile[i]);
+  thread->cwd = idup(main_thread->cwd);
+  safestrcpy(thread->name, main_thread->name, sizeof(main_thread->name));
+
+  // Seting up thread stack.
+  uint sp = (uint)stack + PGSIZE;
+  sp -= 8;
+  *(uint*)(sp + 4) = (uint)arg;     
+  *(uint*)sp = 0xffffffff;
+
+  // Setting up registers (base pointer, stack pointer, instruction pointer, eax) 
+  thread->tf->ebp = (uint)sp;
+  thread->tf->esp = (uint)sp;
+  thread->tf->eip = (uint)fcn;
+  thread->tf->eax = 0;
+
+  // Setting thread as runnable.
+  acquire(&ptable.lock);
+  thread->state = RUNNABLE;
+  release(&ptable.lock);
+
+  return pid;
+}
+
+int join(int thread_id)
+{
+    struct proc *thread;
+    int found, tid;
+    struct proc *main_thread = myproc();
+    
+    // Acquire the lock on the table process while searching for the thread.
+    acquire(&ptable.lock);
+    for(;;) 
+    {
+        found = 0;
+        // Search for the 
+        for(thread = ptable.proc; thread < &ptable.proc[NPROC]; thread++)
+        {
+            if((thread->parent != main_thread) || (thread->parent->pgdir != main_thread->pgdir) || (thread->pid != thread_id))
+                continue;
+            // found the thread   
+            found = 1;
+            
+            // Check its state and free it if zombie
+            if(thread->state == ZOMBIE) 
+            {    
+                // Similar to wait() but without freevm() since the space is shared.
+                tid = thread->pid;
+                kfree(thread->kstack);  // free kernel stack
+                thread->kstack = 0;
+                thread->state = UNUSED; // mark slot reusable
+                thread->pid = 0;        // reseet process ID
+                thread->parent = 0;     // unlink from parent
+                thread->name[0] = 0;    // clear name string
+                thread->killed = 0;     // reset killing flag
+                
+                release(&ptable.lock);
+                return tid;
+            }
+        }
+
+        // if not found or the main thread is killed -> no join()
+        if (!found || main_thread->killed)
+        {
+            release(&ptable.lock);
+            return -1;
+        }
+
+        // found the thread but it still didn't finish execution -> wait till it wakes the parent up (after exit())
+        sleep(main_thread, &ptable.lock);
+    }
+}
