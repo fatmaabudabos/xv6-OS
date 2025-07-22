@@ -49,3 +49,10 @@ int atoi(const char*);
 int kthread_create(void (*fnc)(void *), void *arg);
 int kthread_join(int tid);
 void kthread_exit(void);
+
+typedef struct {
+    int locked;
+} spinlock_t;
+void spinlock_init(spinlock_t *lk);
+void spinlock_acquire(spinlock_t *lk);
+void spinlock_release(spinlock_t *lk);
