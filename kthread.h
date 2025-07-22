@@ -2,11 +2,8 @@
 #define _KTHREAD_H_
 
 // THREADS
-typedef struct {
-  int tid;  
-} kthread_t;
-int kthread_create(kthread_t *t, void (*start_routine)(void *), void *arg);
-int kthread_join(kthread_t *t);
+int kthread_create(void (*fnc)(void *), void *arg);
+int kthread_join(int tid);
 void kthread_exit(void);
 
 // SPINLOCKS

@@ -4,6 +4,8 @@
 #include "user.h"
 #include "x86.h"
 
+#define STACK_SIZE 4096
+
 char*
 strcpy(char *s, const char *t)
 {
@@ -103,4 +105,19 @@ memmove(void *vdst, const void *vsrc, int n)
   while(n-- > 0)
     *dst++ = *src++;
   return vdst;
+}
+
+int kthread_create(void (*fnc)(void *), void *arg)
+{
+	char *stack = sbrk(STACK_SIZE);
+	return clone(fnc,arg,stack);	
+} 
+
+int kthread_join(int tid)
+{
+  return join(tid);
+}
+
+void kthread_exit(void) {
+  exit();
 }

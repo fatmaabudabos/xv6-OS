@@ -158,4 +158,21 @@ int sys_getppid(void)
 }
 
 
+int sys_clone(void) {
+  void (*fn)(void *);
+  void *arg, *stack;
 
+  if(argptr(0, (void*)&fn, sizeof(fn)) < 0 || argptr(1, (void*)&arg, sizeof(arg)) < 0 || argptr(2, (void*)&stack, sizeof(stack)) < 0)
+    return -1;
+
+  return clone(fn, arg, stack);
+}
+
+int sys_join(void) {
+  int tid;
+
+  if (argint(0, &tid) < 0)
+    return -1;
+
+  return join(tid);
+}

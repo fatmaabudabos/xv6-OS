@@ -27,6 +27,8 @@ int uptime(void);
 int getsyscallcount(int);
 int getproclist(struct pinfo *list, int max);
 int getppid(void);
+int clone(void (*fn)(void *), void *arg, void *stack);
+int join(int tid);
 
 
 // ulib.c
@@ -42,3 +44,8 @@ void* memset(void*, int, uint);
 void* malloc(uint);
 void free(void*);
 int atoi(const char*);
+
+// kthread library
+int kthread_create(void (*fnc)(void *), void *arg);
+int kthread_join(int tid);
+void kthread_exit(void);
