@@ -144,8 +144,14 @@ int sys_getproclist(void)
 int sys_getsyscallcount(void)
 {
   int num;
+
+  // Extract the first argument passed to the syscall and store it in 'num'.
+  // 'argint' fetches the nth system call argument as an int.
   if (argint(0, &num) < 0 || num < 0 || num >= NSYSCALLS)
+    // If argument is invalid (not an int or out of bounds), return -1 (error).
     return -1;
+
+  // Return the number of times the syscall with number 'num' has been called.
   return syscall_counts[num];
 }
 
