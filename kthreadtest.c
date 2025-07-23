@@ -13,7 +13,7 @@ void simple_thread(void *arg) {
 
     for (int i = 0; i < 3; i++) {
         printf(1, "Thread %d: Working... step %d\n", thread_num, i);
-        sleep(5);
+        //sleep(5);
     }
 
     printf(1, "Thread %d: About to exit\n", thread_num);
