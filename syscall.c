@@ -9,7 +9,7 @@
 #include "pinfo.h"
 
 
-#define NSYSCALLS 23  
+#define NSYSCALLS 26  
 int syscall_counts[NSYSCALLS] = {0};
 // User code makes a system call with INT T_SYSCALL.
 // System call number in %eax.

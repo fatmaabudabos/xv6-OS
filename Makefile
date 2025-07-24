@@ -180,7 +180,6 @@ UPROGS=\
 	_rm\
 	_sh\
 	_stressfs\
-	_usertests\
 	_wc\
 	_zombie\
 	_ps\
@@ -190,8 +189,11 @@ UPROGS=\
 	_head\
 	_find\
 	_cp\
+	_headsample\
 	_kthreadtest\
 	_spinlocktest\
+# 	_usertests\
+
 
 
 fs.img: mkfs README $(UPROGS)
